@@ -4,17 +4,15 @@
    contain the root `toctree` directive.
 
 Welcome to spark_doc's documentation!
+目录:
 =====================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :glob:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   
+   programming_guides/index
+   deployment_guides/index
+   other_documents/index
+   
