@@ -11,7 +11,7 @@
 
 简介
 ------------------------
-这个教程提供了一个学习spark的快速介绍。我们将会通过spark的shell命令行介绍它的API(使用python或者scala)，然后演示如何在java,scala,python语言中编程，查看完整的参考请到这里：`编程指南 http://spark.apache.org/docs/latest/programming-guide.html`_
+这个教程提供了一个学习spark的快速介绍。我们将会通过spark的shell命令行介绍它的API(使用python或者scala)，然后演示如何在java,scala,python语言中编程，查看完整的参考请到这里：`编程指南 <http://spark.apache.org/docs/latest/programming-guide.html>`_
 
 为了学习下面的操作，需要首先去官网下载spark安装包，<a>http://spark.apache.org/downloads.html</a>  。因为在下面的例子中我们不会使用hdfs，所以你可以去官网下载任意版本的spark安装包。
 
