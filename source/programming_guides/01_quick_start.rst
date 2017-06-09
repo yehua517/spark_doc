@@ -23,13 +23,13 @@ Spark Shell命令行操作
 ~~~~~~~~~
 spark shell提供了一个简单的方法去学习API，以及一个强大的工具去解析数据。在scala或者python下都是可用的，在spark的指定目录下面运行即可。
 scala
-``
+```
 ./bin/spark-sehll
-``
+```
 python
-``
+```
 ./bin/pyspark
-``
+```
 saprk中一个抽象的数据集合称为RDD(Resilient Distributed Dataset),RDDs可以从hadoop中的hdfs文件或者通过其他RDD转换得到。让我们通过spark源码目录中的README文件来创建一个新的RDD。
 
 注意：在这里sc可以直接使用，spark shell会默认创建这个对象
