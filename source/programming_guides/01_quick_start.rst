@@ -32,7 +32,7 @@ python::
 
 saprk中一个抽象的数据集合称为RDD(Resilient Distributed Dataset),RDDs可以从hadoop中的hdfs文件或者通过其他RDD转换得到。让我们通过spark源码目录中的README文件来创建一个新的RDD。
 
-.. Attention:: 在这里sc可以直接使用，spark shell会默认创建这个对象
+.. Attention:: 注意:在这里sc可以直接使用，spark shell会默认创建这个对象
 
 ::
 
@@ -60,7 +60,9 @@ RDDs有很多 `action操作 <http://spark.apache.org/docs/latest/programming-gui
 
 解释：transformation和action
 ------------------------------
-RDD提供了两种类型的操作：transformation和action::
+RDD提供了两种类型的操作：``transformation``和``action``
+
+::
 
 	其实，如果大家有hadoop基础，为了理解方便的话，可以这样理解
 	hadoop中的mr计算框架中包含map操作和reduce操作，
