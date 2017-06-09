@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1. 快速入门 &mdash; spark_doc 2.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="spark_doc 2.1.1 documentation" href="../index.html"/>
+        <link rel="up" title="编程文档" href="index.html"/>
+        <link rel="next" title="2. spark 编程指南" href="02_spark_programming_guide.html"/>
+        <link rel="prev" title="编程文档" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark_doc
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">编程文档</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1. 快速入门</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">1.1. 简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spark-shell">1.2. Spark Shell命令行操作</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">基本操作</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#transformationaction">1.3. 解释：transformation和action</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_spark_programming_guide.html">2. spark 编程指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_spar_streamming.html">3. spark streamming</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark_doc</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">编程文档</a> &raquo;</li>
+        
+      <li>1. 快速入门</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/programming_guides/01_quick_start.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>1. 快速入门<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Spark Shell命令行操作</dt>
+<dd><ul class="first last">
+<li>基础操作</li>
+<li>RDD扩展操作</li>
+<li>缓存(Caching)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>内置应用</li>
+<li>更多内容链接</li>
+</ul>
+<div class="section" id="id2">
+<h2>1.1. 简介<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>这个教程提供了一个学习spark的快速介绍。我们将会通过spark的shell命令行介绍它的API(使用python或者scala)，然后演示如何在java,scala,python语言中编程，查看完整的参考请到这里：<a class="reference external" href="http://spark.apache.org/docs/latest/programming-guide.html">编程指南</a></p>
+<p>为了学习下面的操作，需要首先去官网下载spark安装包，<a class="reference external" href="http://spark.apache.org/downloads.html">官网下载地址</a> 。因为在下面的例子中我们不会使用hdfs，所以你可以去官网下载任意版本的spark安装包。</p>
+</div>
+<div class="section" id="spark-shell">
+<h2>1.2. Spark Shell命令行操作<a class="headerlink" href="#spark-shell" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>基本操作<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>spark shell提供了一个简单的方法去学习API，以及一个强大的工具去解析数据。在scala或者python下都是可用的，在spark的指定目录下面运行即可。</p>
+<p>scala:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">sehll</span>
+</pre></div>
+</div>
+<p>python:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">pyspark</span>
+</pre></div>
+</div>
+<p>saprk中一个抽象的数据集合称为RDD(Resilient Distributed Dataset),RDDs可以从hadoop中的hdfs文件或者通过其他RDD转换得到。让我们通过spark源码目录中的README文件来创建一个新的RDD。</p>
+<p>注意：在这里sc可以直接使用，spark shell会默认创建这个对象:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&gt;&gt;&gt; textFile = sc.textFile(“README.md&quot;)
+</pre></div>
+</div>
+<p>RDDs有很多 <a class="reference external" href="http://spark.apache.org/docs/latest/programming-guide.html#actions">action操作</a> ，哪个返回值和transformation，哪个返回一个新的RDD，我们来尝试几个操作吧:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">textFile</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="c1"># 返回这个RDD中有多少个元素</span>
+<span class="go">126</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">textFile</span><span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="c1"># 返回RDD中的第一个元素</span>
+<span class="go">u&#39;# Apache Spark&#39;</span>
+</pre></div>
+</div>
+<p>现在让我们使执行一个transformation操作，我们将会使用filter 过滤算子返回一个包含之前RDD中满足条件数据的新RDD:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">linesWithSpark</span> <span class="o">=</span> <span class="n">textFile</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="s2">&quot;Spark&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>我们可以在一块使用transformations和actions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">textFile</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="s2">&quot;Spark&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="c1"># 多少行包含saprk这个关键字?</span>
+<span class="go">15</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="transformationaction">
+<h2>1.3. 解释：transformation和action<a class="headerlink" href="#transformationaction" title="Permalink to this headline">¶</a></h2>
+<p>RDD提供了两种类型的操作：transformation和action:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>其实，如果大家有hadoop基础，为了理解方便的话，可以这样理解
+hadoop中的mr计算框架中包含map操作和reduce操作，
+spark计算框架中包含transformation操作和action操作
+但是注意：前期为了好理解可以暂且这样理解，其实这个解释是不对的，这个等后期熟悉了之后就可以区分开了。
+</pre></div>
+</div>
+<p>1，transformation是得到一个新的RDD，方式很多，比如从数据源生成一个新的RDD，从RDD生成一个新的RDD</p>
+<p>2，action是得到一个值，或者一个结果（直接将RDD cache到内存中）
+所有的transformation都是采用的懒策略，就是如果只是将transformation提交是不会执行计算的，计算只有在action被提交的时候才被触发</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="02_spark_programming_guide.html" class="btn btn-neutral float-right" title="2. spark 编程指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="编程文档" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, yehua.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
