@@ -1,6 +1,8 @@
 快速入门
 =============
 
+``本文档基于spark2.1.1版本翻译``
+
 * Spark Shell命令行操作
      * 基础操作
      * RDD扩展操作
@@ -59,7 +61,7 @@ RDDs有很多 `action操作 <http://spark.apache.org/docs/latest/programming-gui
 	15
 
 解释：transformation和action
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RDD提供了两种类型的操作：``transformation和action``
 
 ::
