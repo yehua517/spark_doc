@@ -11,7 +11,7 @@
 
 简介
 ------------------------
-这个教程提供了一个学习spark的快速介绍。我们将会通过spark的shell命令行介绍它的API(使用python或者scala)，然后演示如何在java,scala,python语言中编程，查看完整的参考请到这里：<a href=“http://spark.apache.org/docs/latest/programming-guide.html">02：编程指南</a>
+这个教程提供了一个学习spark的快速介绍。我们将会通过spark的shell命令行介绍它的API(使用python或者scala)，然后演示如何在java,scala,python语言中编程，查看完整的参考请到这里：`编程指南 http://spark.apache.org/docs/latest/programming-guide.html`_
 
 为了学习下面的操作，需要首先去官网下载spark安装包，<a>http://spark.apache.org/downloads.html</a>  。因为在下面的例子中我们不会使用hdfs，所以你可以去官网下载任意版本的spark安装包。
 
@@ -67,5 +67,6 @@ RDD提供了两种类型的操作：transformation和action::
 	但是注意：前期为了好理解可以暂且这样理解，其实这个解释是不对的，这个等后期熟悉了之后就可以区分开了。
 
 1，transformation是得到一个新的RDD，方式很多，比如从数据源生成一个新的RDD，从RDD生成一个新的RDD
+
 2，action是得到一个值，或者一个结果（直接将RDD cache到内存中）
 所有的transformation都是采用的懒策略，就是如果只是将transformation提交是不会执行计算的，计算只有在action被提交的时候才被触发
