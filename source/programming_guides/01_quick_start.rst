@@ -13,7 +13,7 @@
 ------------------------
 这个教程提供了一个学习spark的快速介绍。我们将会通过spark的shell命令行介绍它的API(使用python或者scala)，然后演示如何在java,scala,python语言中编程，查看完整的参考请到这里：`编程指南 <http://spark.apache.org/docs/latest/programming-guide.html>`_
 
-为了学习下面的操作，需要首先去官网下载spark安装包，<a>http://spark.apache.org/downloads.html</a>  。因为在下面的例子中我们不会使用hdfs，所以你可以去官网下载任意版本的spark安装包。
+为了学习下面的操作，需要首先去官网下载spark安装包，`官网下载地址 <http://spark.apache.org/downloads.html>`_ 。因为在下面的例子中我们不会使用hdfs，所以你可以去官网下载任意版本的spark安装包。
 
 
 
@@ -38,7 +38,7 @@ saprk中一个抽象的数据集合称为RDD(Resilient Distributed Dataset),RDDs
 	>>> textFile = sc.textFile(“README.md")
 
 
-RDDs有很多action操作<a>http://spark.apache.org/docs/latest/programming-guide.html#actions</a>，哪个返回值和transformation，哪个返回一个新的RDD，我们来尝试几个操作吧::
+RDDs有很多`action操作 <http://spark.apache.org/docs/latest/programming-guide.html#actions>`_，哪个返回值和transformation，哪个返回一个新的RDD，我们来尝试几个操作吧::
 
 	>>> textFile.count() # 返回这个RDD中有多少个元素
 	126
