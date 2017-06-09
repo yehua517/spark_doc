@@ -38,7 +38,7 @@ saprk中一个抽象的数据集合称为RDD(Resilient Distributed Dataset),RDDs
 	>>> textFile = sc.textFile(“README.md")
 
 
-RDDs有很多`action操作 <http://spark.apache.org/docs/latest/programming-guide.html#actions>`_，哪个返回值和transformation，哪个返回一个新的RDD，我们来尝试几个操作吧::
+RDDs有很多 `action操作 <http://spark.apache.org/docs/latest/programming-guide.html\#actions>`_ ，哪个返回值和transformation，哪个返回一个新的RDD，我们来尝试几个操作吧::
 
 	>>> textFile.count() # 返回这个RDD中有多少个元素
 	126
