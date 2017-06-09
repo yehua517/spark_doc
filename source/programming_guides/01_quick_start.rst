@@ -60,7 +60,7 @@ RDDs有很多 `action操作 <http://spark.apache.org/docs/latest/programming-gui
 
 解释：transformation和action
 ------------------------------
-RDD提供了两种类型的操作：``transformation``和``action``
+RDD提供了两种类型的操作：``transformation和action``
 
 ::
 
