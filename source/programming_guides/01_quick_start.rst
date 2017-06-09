@@ -32,7 +32,7 @@ python::
 
 saprk中一个抽象的数据集合称为RDD(Resilient Distributed Dataset),RDDs可以从hadoop中的hdfs文件或者通过其他RDD转换得到。让我们通过spark源码目录中的README文件来创建一个新的RDD。
 
-注意：在这里sc可以直接使用，spark shell会默认创建这个对象::
+.. 注意:: 在这里sc可以直接使用，spark shell会默认创建这个对象::
 
 	>>> textFile = sc.textFile(“README.md")
 
