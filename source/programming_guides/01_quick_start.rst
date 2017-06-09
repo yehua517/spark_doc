@@ -69,7 +69,7 @@ RDD提供了两种类型的操作：``transformation和action``
 	spark计算框架中包含transformation操作和action操作
 	但是注意：前期为了好理解可以暂且这样理解，其实这个解释是不对的，这个等后期熟悉了之后就可以区分开了。
 
-1，transformation是得到一个新的RDD，方式很多，比如从数据源生成一个新的RDD，从RDD生成一个新的RDD
+1：transformation是得到一个新的RDD，方式很多，比如从数据源生成一个新的RDD，从RDD生成一个新的RDD
 
-2，action是得到一个值，或者一个结果（直接将RDD cache到内存中）
+2：action是得到一个值，或者一个结果（直接将RDD cache到内存中）
 所有的transformation都是采用的懒策略，就是如果只是将transformation提交是不会执行计算的，计算只有在action被提交的时候才被触发
