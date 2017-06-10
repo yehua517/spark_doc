@@ -91,4 +91,4 @@ scala::
      scala> textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
      res4: Long = 15
 
-我们将会使用函数使这个代码变得更加容易理解：
+我们将会使用 ``Math.max() `` 函数使这个代码变得更加容易理解：
