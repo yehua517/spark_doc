@@ -62,7 +62,7 @@ RDDs有很多 `action操作 <http://spark.apache.org/docs/latest/programming-gui
 
 ::
 
-    scala> textFile.filter(line => line.contains("Spark")).count() // How many lines contain "Spark"?
+    scala> textFile.filter(line => line.contains("Spark")).count() // 有多少行包含spark关键词
     res3: Long = 15
 
 ``解释：transformation和action``
@@ -133,7 +133,8 @@ spark还支持将一个数据集提交到集群的内存缓存中，这是非常
     scala> linesWithSpark.count()
     res9: Long = 15
 
-在这里，我们缓存了一个100行左右的文件，看起来好像没什么用，其实这些相同的函数可以用于非常大的数据集,即使他们跨越几十或几百个节点，你可以通过 ``bin/spark-shell`` 这个工具来和spark集群交互，详细信息需要查看 `编程文档 <http://spark.apache.org/docs/latest/programming-guide.html#initializing-spark>`_ 。
+在这里，我们缓存了一个100行左右的文件，看起来好像没什么用，其实这些相同的函数可以用于非常大的数据集,即使他们跨越几十或几百个节点
+你可以通过 ``bin/spark-shell`` 这个工具来和spark集群交互，详细信息需要查看 `编程文档 <http://spark.apache.org/docs/latest/programming-guide.html#initializing-spark>`_ 。
 
 spark应用开发
 ------------------
