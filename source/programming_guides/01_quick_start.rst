@@ -211,12 +211,9 @@ scala：
 ~~~~~~~~
 祝贺你的第一个程序正式运行。
 
-* For an in-depth overview of the API, start with the Spark programming guide, or see “Programming Guides” menu for other components.
-想要更深入的学习API，可以查看 `编程指南 <http://spark.apache.org/docs/latest/programming-guide.html>`_ 
-* For running applications on a cluster, head to the deployment overview.
-想要在集群上运行你的程序，可以去查看 `部署概述 <http://spark.apache.org/docs/latest/cluster-overview.html>`_
-* Finally, Spark includes several samples in the examples directory (Scala, Java, Python, R). You can run them as follows:
-最后，spark安装包下面的example目录下包含了scala，java，Python，R等语言的一些例子。你可以这样来运行它们：
+* 想要更深入的学习API，可以查看 `编程指南 <http://spark.apache.org/docs/latest/programming-guide.html>`_ 
+* 想要在集群上运行你的程序，可以去查看 `部署概述 <http://spark.apache.org/docs/latest/cluster-overview.html>`_
+* 最后，spark安装包下面的example目录下包含了scala，java，Python，R等语言的一些例子。你可以这样来运行它们：
 
 ::
     # 针对scala和java，这样使用
