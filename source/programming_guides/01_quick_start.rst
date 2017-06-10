@@ -16,8 +16,6 @@
 
 为了学习下面的操作，需要首先去官网下载spark安装包，`官网下载地址 <http://spark.apache.org/downloads.html>`_ 。因为在下面的例子中我们不会使用hdfs，所以你可以去官网下载任意版本的spark安装包。
 
-
-
 Spark Shell命令行操作
 ---------------------
 基本操作
