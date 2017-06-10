@@ -91,4 +91,31 @@ scala::
      scala> textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
      res4: Long = 15
 
-我们将会使用 ``Math.max() `` 函数使这个代码变得更加容易理解：
+首先是通过 ``map`` 函数把一行行数据映射成一个个数字类型的值，创建一个新的。 然后调用 ``reduce`` 函数获取到最大的那一行。 ``map`` 和 ``reduce`` 函数的参数是scala的闭包函数，并且还可以使用scala/java库中的功能。例如：我们可以很容易的在任意地方调用函数。我们将会使用 ``Math.max()`` 函数使这个代码变得更加容易理解：
+
+::
+
+    scala> import java.lang.Math
+    import java.lang.Math
+
+    scala> textFile.map(line => line.split(" ").size).reduce((a, b) => Math.max(a, b))
+    res5: Int = 15
+
+hadoop推出的一个常见的数据流模式是MapReduce，spark也可以很容易的实现MapReduce：
+
+::
+
+    scala> val wordCounts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey((a, b) => a + b)
+    wordCounts: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[8] at reduceByKey at <console>:28
+
+这里，我们结合 ``flatMap`` , ``map`` , ``reduceByKey`` 算子(函数)计算出了文件中的每个单词出现的次数，作为一个pair(String,Int)类型的RDD。``此处的pair可以理解为键值对类型的数据``
+在我们的shell命令行下获取单词对应的次数数据，可以使用 ``collect`` 算子：
+
+::
+
+    scala> wordCounts.collect()
+    res6: Array[(String, Int)] = Array((means,1), (under,2), (this,3), (Because,1), (Python,2), (agree,1), (cluster.,1), ...)
+
+缓存(Caching)
+~~~~~~~~~~~~~~
+
