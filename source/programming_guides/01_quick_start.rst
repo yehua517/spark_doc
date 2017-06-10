@@ -86,8 +86,7 @@ RDD扩展操作
 
 RDD ``actions和transfromations`` 可以执行更复杂的运算。假设我们单词最多的那行数据：
 
-scala:
-::
+scala::
 
      scala> textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
      res4: Long = 15
