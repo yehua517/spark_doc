@@ -7,7 +7,7 @@
     * 基础操作
     * RDD扩展操作
     * 缓存(Caching)
-* spark应用开发
+* spark程序开发
 * 更多内容链接
 
 简介
@@ -118,11 +118,12 @@ hadoop推出的一个常见的数据流模式是MapReduce，spark也可以很容
     res6: Array[(String, Int)] = Array((means,1), (under,2), (this,3), (Because,1), (Python,2), (agree,1), (cluster.,1), ...)
 
 缓存(Caching)
-~~~~~~~~~~~~~~
+------------------
 
 spark还支持将一个数据集提交到集群的内存缓存中，这是非常有用的当这个数据被重复访问的时候，例如当查询一个小“热”数据集或运行像PageRank这种迭代算法。举一个简单的例子，让我们使用前面的 ``linesWithSpark`` 数据集来进行缓存：
 
 ::
+
     scala> linesWithSpark.cache()
     res7: linesWithSpark.type = MapPartitionsRDD[2] at filter at <console>:27
 
@@ -143,6 +144,7 @@ scala：
 我们将会创建一个简单的spark应用代码，代码的文件名为：``SimpleApp.scala``
 
 ::
+
     /* SimpleApp.scala */
     import org.apache.spark.SparkContext
     import org.apache.spark.SparkContext._
@@ -172,6 +174,7 @@ scala：
 我们的程序依赖sparkAPI，因此我们需要有一个sbt的配置文件 ``build.sbt`` ， 这个文件中需要添加spark的依赖。
 
 ::
+
     name := "Simple Project"
 
     version := "1.0"
@@ -184,6 +187,7 @@ scala：
 放置好了之后，我们就可以使用sbt把 ``SimpleApp.scala`` 中的代码打成一个jar包，然后就可以使用 ``spark-submit`` 脚本去运行我们的程序了。
 
 ::
+
     # 你的目录布局应该像这样(需要执行下面的find . 命令 表示查看当前目录下面的文件结构信息)
     $ find .
     .
@@ -207,8 +211,8 @@ scala：
     Lines with a: 46, Lines with b: 23
 
 
-更多链接
-~~~~~~~~
+更多内容链接
+----------------
 祝贺你的第一个程序正式运行。
 
 * 想要更深入的学习API，可以查看 `编程指南 <http://spark.apache.org/docs/latest/programming-guide.html>`_ 
@@ -216,6 +220,7 @@ scala：
 * 最后，spark安装包下面的example目录下包含了scala，java，Python，R等语言的一些例子。你可以这样来运行它们：
 
 ::
+
     # 针对scala和java，这样使用
     ./bin/run-example SparkPi
 
