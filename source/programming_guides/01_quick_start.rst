@@ -7,7 +7,7 @@
     * 基础操作
     * RDD扩展操作
     * 缓存(Caching)
-* 内置应用
+* spark应用开发
 * 更多内容链接
 
 简介
@@ -134,5 +134,98 @@ spark还支持将一个数据集提交到集群的内存缓存中，这是非常
 
 在这里，我们缓存了一个100行左右的文件，看起来好像没什么用，其实这些相同的函数可以用于非常大的数据集,即使他们跨越几十或几百个节点，你可以通过 ``bin/spark-shell`` 这个工具来和spark集群交互，详细信息需要查看 `编程文档 <http://spark.apache.org/docs/latest/programming-guide.html#initializing-spark>`_ 。
 
+spark应用开发
+~~~~~~~~~~~~~
+
+假设我们想使用sparkAPI来写一个应用，我们可以通过scala，java或者python来实现。
+
+scala：
+我们将会创建一个简单的spark应用代码，代码的文件名为：``SimpleApp.scala``
+
+::
+    /* SimpleApp.scala */
+    import org.apache.spark.SparkContext
+    import org.apache.spark.SparkContext._
+    import org.apache.spark.SparkConf
+
+    object SimpleApp {
+      def main(args: Array[String]) {
+        val logFile = "YOUR_SPARK_HOME/README.md" // 需要确保你的电脑中有这个文件，一定要修改YOUR_SPARK_HOME这个变量，改为你电脑上spark的安装目录
+        val conf = new SparkConf().setAppName("Simple Application")
+        val sc = new SparkContext(conf)
+        val logData = sc.textFile(logFile, 2).cache()
+        val numAs = logData.filter(line => line.contains("a")).count()
+        val numBs = logData.filter(line => line.contains("b")).count()
+        println(s"Lines with a: $numAs, Lines with b: $numBs")
+        sc.stop()
+      }
+    }
+
+请注意：这个应用的代码应该定义一个 ``main()`` 方法，而不是去继承 ``scala.App`` 。 ``scala.App`` 的子类可能无法正常运行。
+
+这个程序仅仅统计了在spark目录里面 ``README.md`` 这个文件中有多少行包含字母 ``a`` 或者 包含字母 ``b`` 
+请注意，你需要替换程序中的 ``YOUR_SPARK_HOME`` ,改为你的spark的安装目录，其实最终是为了确保能正确找到 ``README.md`` 这个文件
+和之前在 ``spark-shell`` 下面写的代码不一样，在这里， ``SparkContext`` 对象是需要我们自己初始化的。
+
+我们通过 ``SparkContext`` 的构造函数创建了一个 `SparkConf <http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.SparkConf>`_  对象，这个对象里面包含了我们这个程序的一些基本信息。
+
+我们的程序依赖sparkAPI，因此我们需要有一个sbt的配置文件 ``build.sbt`` ， 这个文件中需要添加spark的依赖。
+
+::
+    name := "Simple Project"
+
+    version := "1.0"
+
+    scalaVersion := "2.11.7"
+
+    libraryDependencies += "org.apache.spark" %% "spark-core" % "2.1.1"
+
+为了让sbt正常工作，我们需要保证 ``SimpleApp.scala`` 和 ``build.sbt`` 这两个文件按照一定的目录结构进行放置。
+放置好了之后，我们就可以使用sbt把 ``SimpleApp.scala`` 中的代码打成一个jar包，然后就可以使用 ``spark-submit`` 脚本去运行我们的程序了。
+
+::
+    # 你的目录布局应该像这样(需要执行下面的find . 命令 表示查看当前目录下面的文件结构信息)
+    $ find .
+    .
+    ./build.sbt
+    ./src
+    ./src/main
+    ./src/main/scala
+    ./src/main/scala/SimpleApp.scala
+
+    # 使用sbt对你的程序代码打包
+    $ sbt package
+    ...
+    [info] Packaging {..}/{..}/target/scala-2.11/simple-project_2.11-1.0.jar
+
+    # 使用spark-submit脚本运行你的程序
+    $ YOUR_SPARK_HOME/bin/spark-submit \
+      --class "SimpleApp" \
+      --master local[4] \
+      target/scala-2.11/simple-project_2.11-1.0.jar
+    ...
+    Lines with a: 46, Lines with b: 23
+
+
+更多链接
+~~~~~~~~
+祝贺你的第一个程序正式运行。
+
+* For an in-depth overview of the API, start with the Spark programming guide, or see “Programming Guides” menu for other components.
+想要更深入的学习API，可以查看 `编程指南 <http://spark.apache.org/docs/latest/programming-guide.html>`_ 
+* For running applications on a cluster, head to the deployment overview.
+想要在集群上运行你的程序，可以去查看 `部署概述 <http://spark.apache.org/docs/latest/cluster-overview.html>`_
+* Finally, Spark includes several samples in the examples directory (Scala, Java, Python, R). You can run them as follows:
+最后，spark安装包下面的example目录下包含了scala，java，Python，R等语言的一些例子。你可以这样来运行它们：
+
+::
+    # 针对scala和java，这样使用
+    ./bin/run-example SparkPi
+
+    # 针对python例子，使用spark-submit脚本
+    ./bin/spark-submit examples/src/main/python/pi.py
+
+    # 针对R例子，使用spark-submit脚本
+    ./bin/spark-submit examples/src/main/r/dataframe.R
 
 
