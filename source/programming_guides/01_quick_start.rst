@@ -118,7 +118,7 @@ hadoop推出的一个常见的数据流模式是MapReduce，spark也可以很容
     res6: Array[(String, Int)] = Array((means,1), (under,2), (this,3), (Because,1), (Python,2), (agree,1), (cluster.,1), ...)
 
 缓存(Caching)
-------------------
+~~~~~~~~~~~~~
 
 spark还支持将一个数据集提交到集群的内存缓存中，这是非常有用的当这个数据被重复访问的时候，例如当查询一个小“热”数据集或运行像PageRank这种迭代算法。举一个简单的例子，让我们使用前面的 ``linesWithSpark`` 数据集来进行缓存：
 
@@ -136,7 +136,7 @@ spark还支持将一个数据集提交到集群的内存缓存中，这是非常
 在这里，我们缓存了一个100行左右的文件，看起来好像没什么用，其实这些相同的函数可以用于非常大的数据集,即使他们跨越几十或几百个节点，你可以通过 ``bin/spark-shell`` 这个工具来和spark集群交互，详细信息需要查看 `编程文档 <http://spark.apache.org/docs/latest/programming-guide.html#initializing-spark>`_ 。
 
 spark应用开发
-~~~~~~~~~~~~~
+------------------
 
 假设我们想使用sparkAPI来写一个应用，我们可以通过scala，java或者python来实现。
 
