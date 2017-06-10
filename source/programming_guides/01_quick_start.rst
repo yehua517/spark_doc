@@ -101,19 +101,3 @@ scala::
     scala> textFile.map(line => line.split(" ").size).reduce((a, b) => Math.max(a, b))
     res5: Int = 15
 
-hadoop推出的一个常见的数据流模式是MapReduce，spark也可以很容易的实现MapReduce：
-
-::
-
-    scala> val wordCounts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey((a, b) => a + b)
-    wordCounts: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[8] at reduceByKey at <console>:28
-
-这里，我们结合 ``flatMap`` , ``map`` , ``reduceByKey`` 算子(函数)计算出了文件中的每个单词出现的次数，作为一个pair(String,Int)类型的RDD。``此处的pair可以理解为键值对类型的数据``
-
-在我们的shell命令行下获取单词对应的次数数据，可以使用 ``collect`` 算子：
-
-::
-
-    scala> wordCounts.collect()
-    res6: Array[(String, Int)] = Array((means,1), (under,2), (this,3), (Because,1), (Python,2), (agree,1), (cluster.,1), ...)
-
