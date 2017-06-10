@@ -91,4 +91,4 @@ scala::
      scala> textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
      res4: Long = 15
 
-首先是通过 ``map`` 函数把一行行数据映射成一个个数字类型的值，创建一个新的。 然后调用 ``reduce`` 函数获取到最大的那一行。 ``map`` 和 ``reduce`` 函数的参数是scala的闭包函数，并且还可以使用scala/java库中的功能。例如：我们可以很容易的在任意地方调用函数。我们将会使用\ ``Math.max()``\ 函数使这个代码变得更加容易理解：
+我们将会使用函数使这个代码变得更加容易理解：
