@@ -91,8 +91,7 @@ scala::
      scala> textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
      res4: Long = 15
 
-首先是通过 ``map`` 函数把一行行数据映射成一个个数字类型的值，创建一个新的。 然后调用 ``reduce`` 函数获取到最大的那一行。 ``map`` 和 ``reduce`` 函数的参数是scala的闭包函数，并且还可以使用scala/java库中的功能。 
-例如我们将会使用函数使这个代码变得更加容易理解
+首先是通过 ``map`` 函数把一行行数据映射成一个个数字类型的值，创建一个新的。 然后调用 ``reduce`` 函数获取到最大的那一行。 ``map`` 和 ``reduce`` 函数的参数是scala的闭包函数，并且还可以使用scala/java库中的功能。 例如:我们可以很容易的在任意地方调用函数。我们将会使用 ``Math.max()`` 函数使这个代码变得更加容易理解:
 
 ::
 
@@ -119,3 +118,20 @@ hadoop推出的一个常见的数据流模式是MapReduce，spark也可以很容
 
 缓存(Caching)
 ~~~~~~~~~~~~~~
+
+spark还支持将一个数据集提交到集群的内存缓存中，这是非常有用的当这个数据被重复访问的时候，例如当查询一个小“热”数据集或运行像PageRank这种迭代算法。举一个简单的例子，让我们使用前面的 ``linesWithSpark`` 数据集来进行缓存：
+
+::
+    scala> linesWithSpark.cache()
+    res7: linesWithSpark.type = MapPartitionsRDD[2] at filter at <console>:27
+
+    scala> linesWithSpark.count()
+    res8: Long = 15
+
+    scala> linesWithSpark.count()
+    res9: Long = 15
+
+在这里，我们缓存了一个100行左右的文件，看起来好像没什么用，其实这些相同的函数可以用于非常大的数据集,即使他们跨越几十或几百个节点，你可以通过 ``bin/spark-shell`` 这个工具来和spark集群交互，详细信息需要查看 `编程文档 <http://spark.apache.org/docs/latest/programming-guide.html#initializing-spark>`_ 。
+
+
+
