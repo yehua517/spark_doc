@@ -183,31 +183,3 @@ scala：
     scalaVersion := "2.11.7"
 
     libraryDependencies += "org.apache.spark" %% "spark-core" % "2.1.1"
-
-为了让sbt正常工作，我们需要保证 ``SimpleApp.scala`` 和 ``build.sbt`` 这两个文件按照一定的目录结构进行放置。
-放置好了之后，我们就可以使用sbt把 ``SimpleApp.scala`` 中的代码打成一个jar包，然后就可以使用 ``spark-submit`` 脚本去运行我们的程序了。
-
-::
-
-    # 你的目录布局应该像这样(需要执行下面的find . 命令 表示查看当前目录下面的文件结构信息)
-    $ find .
-    .
-    ./build.sbt
-    ./src
-    ./src/main
-    ./src/main/scala
-    ./src/main/scala/SimpleApp.scala
-
-    # 使用sbt对你的程序代码打包
-    $ sbt package
-    ...
-    [info] Packaging {..}/{..}/target/scala-2.11/simple-project_2.11-1.0.jar
-
-    # 使用spark-submit脚本运行你的程序
-    $ YOUR_SPARK_HOME/bin/spark-submit \
-      --class "SimpleApp" \
-      --master local[4] \
-      target/scala-2.11/simple-project_2.11-1.0.jar
-    ...
-    Lines with a: 46, Lines with b: 23
-
