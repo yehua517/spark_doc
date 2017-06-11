@@ -163,23 +163,3 @@ scala：
         sc.stop()
       }
     }
-
-请注意：这个应用的代码应该定义一个 ``main()`` 方法，而不是去继承 ``scala.App`` 。 ``scala.App`` 的子类可能无法正常运行。
-
-这个程序仅仅统计了在spark目录里面 ``README.md`` 这个文件中有多少行包含字母 ``a`` 或者 包含字母 ``b`` 
-请注意，你需要替换程序中的 ``YOUR_SPARK_HOME`` ,改为你的spark的安装目录，其实最终是为了确保能正确找到 ``README.md`` 这个文件
-和之前在 ``spark-shell`` 下面写的代码不一样，在这里， ``SparkContext`` 对象是需要我们自己初始化的。
-
-我们通过 ``SparkContext`` 的构造函数创建了一个 `SparkConf <http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.SparkConf>`_  对象，这个对象里面包含了我们这个程序的一些基本信息。
-
-我们的程序依赖sparkAPI，因此我们需要有一个sbt的配置文件 ``build.sbt`` ， 这个文件中需要添加spark的依赖。
-
-::
-
-    name := "Simple Project"
-
-    version := "1.0"
-
-    scalaVersion := "2.11.7"
-
-    libraryDependencies += "org.apache.spark" %% "spark-core" % "2.1.1"
