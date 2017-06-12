@@ -5,6 +5,9 @@
 
 spark文档目录
 ===============
+
+.. Tip:: 本文档基于spark2.1.1版本翻译，目前只翻译scala相关代码例子，不涉及python。
+
 .. toctree::
    :maxdepth: 2
    :glob:
