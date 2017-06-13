@@ -88,7 +88,7 @@ Finally, you need to import some Spark classes into your program. Add the follow
 	val conf = new SparkConf().setAppName(appName).setMaster(master)
 	new SparkContext(conf)
 
-上面代码中的 ``appName`` 是你应用的一个名字，可以在集群UI界面中展示。 ``master`` 是 `spark，mesos 或者 yarn 的集群地址 <http://spark.apache.org/docs/latest/submitting-applications.html#master-urls>`_，或者一个特殊的 ``local`` 字符串使用本地模式运行。在实际中，当在一个集群上运行，你将不会再程序中硬编码 ``master`` ，而是使用 `spark-submit <http://spark.apache.org/docs/latest/submitting-applications.html>`_ 脚本接收参数去运行程序。然而，针对本地测试代码和单元测试代码，你可以通过 ``local`` 在spark进程内部执行。
+上面代码中的 ``appName`` 是你应用的一个名字，可以在集群UI界面中展示。 ``master`` 是 `spark，mesos 或者 yarn 的集群地址 <http://spark.apache.org/docs/latest/submitting-applications.html#master-urls>`_，或者一个特殊的 ``local`` 字符串使用本地模式运行。在实际中，当在一个集群上运行，你将不会在程序中硬编码 ``master`` ，而是使用 `spark-submit <http://spark.apache.org/docs/latest/submitting-applications.html>`_ 脚本接收参数去运行程序。然而，针对本地测试代码和单元测试代码，你可以通过 ``local`` 在本地执行。
 
 使用spark-Shell
 ~~~~~~~~~~~~~~~~
@@ -112,3 +112,59 @@ Finally, you need to import some Spark classes into your program. Add the follow
 	$ ./bin/spark-shell --master local[4] --packages "org.example:example:0.1"
 
 如果想要查看一个完整的列表，运行 ``spark-shell --help`` 。在这个场景下， ``spark-shell`` 调用了更多普通的 `spark-submit函数 <http://spark.apache.org/docs/latest/submitting-applications.html>`_
+
+
+弹性分布式数据集 (RDDs)
+--------------------
+
+Spark revolves around the concept of a resilient distributed dataset (RDD), which is a fault-tolerant collection of elements that can be operated on in parallel. There are two ways to create RDDs: parallelizing an existing collection in your driver program, or referencing a dataset in an external storage system, such as a shared filesystem, HDFS, HBase, or any data source offering a Hadoop InputFormat.
+RDD是spark中非常重要的概念，它是一种可以并行操作的容错的元素集合。有两种方式去创建RDDs：1，在你的代码中初始化一个已经存在的集合 2，引用一个外部存储系统的数据集，例如一个共享的文件系统，hdfs ，hbase等...
+
+并行化集合
+~~~~~~~~~~
+
+Parallelized collections are created by calling SparkContext’s parallelize method on an existing collection in your driver program (a Scala Seq). The elements of the collection are copied to form a distributed dataset that can be operated on in parallel. For example, here is how to create a parallelized collection holding the numbers 1 to 5:
+可以通过在你的程序代码中调用sparkContext的 ``parallelize`` 方法去操作一个已存在的集合来创建一个并行化集合。集合中的元素通过并行化操作复制到一个分布式的集合中可以被并行操作。例如：下面这个代码就是演示了通过数字1~5如何来创建一个并行化集合：
+
+::
+
+	val data = Array(1, 2, 3, 4, 5)
+	val distData = sc.parallelize(data)
+
+一旦创建成功，这个分布式的数据集就可以被并行化的操作。例如，我们可以调用 ``distData.reduce((a, b) => a + b)`` 这个方法来对数组中的数据进行聚合。我们一会将会描述对分布式数据集的操作。
+
+并行集合的一个重要参数是对数据集的切片数量。spark将会在集群中针对每一个分片运行一个任务。通常，在你的集群中给每个cpu分配2-4个分片。正常情况下，spark会依据你的集群来自动设置分片的数量。然而，你也可以在 ``parallelize`` 这个方法的第二个参数中手工设置一个参数(例如： ``sc.parallelize(data, 10)`` )。注意：在代码中的一些地方会使用分片的同义词(term)来保证代码的向后兼容性。
+
+外部数据集
+~~~~~~~~~~
+
+spark可以从任何hadoop支持的数据源来创建分布式数据集，包含你的本地文件，HDFS,Cassandra, HBase,  `Amazon S3 <http://wiki.apache.org/hadoop/AmazonS3>`_ , etc. spark支持文本文件(text files)，序列化文件( `SequenceFiles <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/mapred/SequenceFileInputFormat.html>`_ )和任意其他hadoop序列化( `inputFormat <http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/mapred/InputFormat.html>`_ )的文件
+
+Text file RDDs can be created using SparkContext’s textFile method. This method takes an URI for the file (either a local path on the machine, or a hdfs://, s3n://, etc URI) and reads it as a collection of lines. Here is an example invocation:
+文本文件的RDD对象可以通过 ``sparkContext`` 的 ``textFile`` 方法。这个方法需要文件的一个url(要么是一个本地文件，或者是hdfs://, s3n://, etc URI) 并且会把文件的所有行读取出来作为一个集合。下面是一个调用的例子：
+
+::
+	
+	scala> val distFile = sc.textFile("data.txt")
+	distFile: org.apache.spark.rdd.RDD[String] = data.txt MapPartitionsRDD[10] at textFile at <console>:26
+
+一旦创建成功， ``distFile`` 就可以作为数据集来操作了。例如：我们可以统计所有行的大小，使用 ``map`` 和 ``reduce`` 方法： ``distFile.map(s => s.length).reduce((a, b) => a + b)``
+
+spark读取文件的一些注意事项：
+
+* 如果你使用一个本地文件系统路径，那么注意了，这个文件必须存在于集群的所有worker节点的相同路径下面。要么你把这个文件拷贝到所有的worker节点，或者使用一个共享的文件系统(例如 使用NFS实现文件共享)。
+
+* spark的textFile方法，针对普通文本文件，支持一个目录，压缩文件，和通配符。例如：你可以使用 ``textFile("/my/directory")`` , ``textFile("/my/directory/*.txt")`` ,和 ``textFile("/my/directory/*.gz")`` 。
+
+* 这个 ``textFile`` 方法需要一个可选的参数来控制文件的分片数量。默认情况下，spark针对文件的每一个block块创建一个分片(在hdfs中，block块的大小默认是128MB)，但是你也可以通过设置一个更大的值来获取更多的分片。注意：你设置的分片数量不能比blocks块的数量小。
+
+除了文本文件类型，spark也支持几种其他数据格式：
+
+*  ``SparkContext.wholeTextFiles`` 让你读取包含了很多小文件的目录，并且返回每一个小文件的信息(文件名，文件内容)作为一个pair。和文本类型文件对比，这个方法针对每一个文件只会返回一条记录(包含文件名和文件内容)。
+
+* 针对 `序列化文件SequenceFiles <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/mapred/SequenceFileInputFormat.html>`_ ，使用sparkcontext的 ``sequenceFile[K, V]`` 方法，K和V是文件中key的类型和value的类型。这些应该是hadoop `Writable <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/Writable.html>`_ 接口的子类，比如，`IntWritable <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/IntWritable.html>`_ 和 `Text <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/Text.html>`_ 。除此之外，spark也允许你使用一些本地类型针对常见的Writables；例如：``sequenceFile[Int, String]`` 会自动使用IntWritables 和 Texts。
+
+
+* For other Hadoop InputFormats, you can use the SparkContext.hadoopRDD method, which takes an arbitrary JobConf and input format class, key class and value class. Set these the same way you would for a Hadoop job with your input source. You can also use SparkContext.newAPIHadoopRDD for InputFormats based on the “new” MapReduce API (org.apache.hadoop.mapreduce).
+
+* RDD.saveAsObjectFile and SparkContext.objectFile support saving an RDD in a simple format consisting of serialized Java objects. While this is not as efficient as specialized formats like Avro, it offers an easy way to save any RDD.
