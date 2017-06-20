@@ -117,13 +117,11 @@ Finally, you need to import some Spark classes into your program. Add the follow
 弹性分布式数据集 (RDDs)
 --------------------
 
-Spark revolves around the concept of a resilient distributed dataset (RDD), which is a fault-tolerant collection of elements that can be operated on in parallel. There are two ways to create RDDs: parallelizing an existing collection in your driver program, or referencing a dataset in an external storage system, such as a shared filesystem, HDFS, HBase, or any data source offering a Hadoop InputFormat.
 RDD是spark中非常重要的概念，它是一种可以并行操作的容错的元素集合。有两种方式去创建RDDs：1，在你的代码中初始化一个已经存在的集合 2，引用一个外部存储系统的数据集，例如一个共享的文件系统，hdfs ，hbase等...
 
 并行化集合
 ~~~~~~~~~~
 
-Parallelized collections are created by calling SparkContext’s parallelize method on an existing collection in your driver program (a Scala Seq). The elements of the collection are copied to form a distributed dataset that can be operated on in parallel. For example, here is how to create a parallelized collection holding the numbers 1 to 5:
 可以通过在你的程序代码中调用sparkContext的 ``parallelize`` 方法去操作一个已存在的集合来创建一个并行化集合。集合中的元素通过并行化操作复制到一个分布式的集合中可以被并行操作。例如：下面这个代码就是演示了通过数字1~5如何来创建一个并行化集合：
 
 ::
@@ -140,7 +138,6 @@ Parallelized collections are created by calling SparkContext’s parallelize met
 
 spark可以从任何hadoop支持的数据源来创建分布式数据集，包含你的本地文件，HDFS,Cassandra, HBase,  `Amazon S3 <http://wiki.apache.org/hadoop/AmazonS3>`_ , etc. spark支持文本文件(text files)，序列化文件( `SequenceFiles <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/mapred/SequenceFileInputFormat.html>`_ )和任意其他hadoop序列化( `inputFormat <http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/mapred/InputFormat.html>`_ )的文件
 
-Text file RDDs can be created using SparkContext’s textFile method. This method takes an URI for the file (either a local path on the machine, or a hdfs://, s3n://, etc URI) and reads it as a collection of lines. Here is an example invocation:
 文本文件的RDD对象可以通过 ``sparkContext`` 的 ``textFile`` 方法。这个方法需要文件的一个url(要么是一个本地文件，或者是hdfs://, s3n://, etc URI) 并且会把文件的所有行读取出来作为一个集合。下面是一个调用的例子：
 
 ::
@@ -165,6 +162,86 @@ spark读取文件的一些注意事项：
 * 针对 `序列化文件SequenceFiles <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/mapred/SequenceFileInputFormat.html>`_ ，使用sparkcontext的 ``sequenceFile[K, V]`` 方法，K和V是文件中key的类型和value的类型。这些应该是hadoop `Writable <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/Writable.html>`_ 接口的子类，比如，`IntWritable <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/IntWritable.html>`_ 和 `Text <http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/Text.html>`_ 。除此之外，spark也允许你使用一些本地类型针对常见的Writables；例如：``sequenceFile[Int, String]`` 会自动使用IntWritables 和 Texts。
 
 
-* For other Hadoop InputFormats, you can use the SparkContext.hadoopRDD method, which takes an arbitrary JobConf and input format class, key class and value class. Set these the same way you would for a Hadoop job with your input source. You can also use SparkContext.newAPIHadoopRDD for InputFormats based on the “new” MapReduce API (org.apache.hadoop.mapreduce).
+* 针对其他hadoop格式数据格式，你可以使用 ``SparkContext.hadoopRDD`` 方法，它需要一个 ``JobConf`` 和输入格式化类，包含key的格式化类和value的格式化类。和设置hadoop任务类似的方式来设置你的数据源。你也可以使用 ``SparkContext.newAPIHadoopRDD`` 方法来使用新的 MapReduce API(org.apache.hadoop.mapreduce)来设置输入格式化类。
 
-* RDD.saveAsObjectFile and SparkContext.objectFile support saving an RDD in a simple format consisting of serialized Java objects. While this is not as efficient as specialized formats like Avro, it offers an easy way to save any RDD.
+*  ``RDD.saveAsObjectFile``  和  ``SparkContext.objectFile`` 方法支持将普通序列化的java对象保存到RDD里面。虽然这种方式不像专业的序列化方式Avro那么高效，但是它提供了一个很简单的方式来保存任意RDD。
+
+
+RDD操作
+~~~~~~~~~~~
+
+RDDs支持两种类型的操作： ``transformations`` (从一个已有数据集创建一个新的数据集) 和 ``actions`` (在一个数据集上进行一系列的运算之后把结果返回到driver程序)。例如， ``map`` 是一个transformation操作，它通过一个map函数对数据集中的每个元素进行操作，并且返回一个新的RDD作为结果。另一方面， ``reduce`` 是一个action操作，它通过一个reduce函数对RDD中的所有元素进行聚合操作，并且返回最终的聚合结果给driver程序。(还有一个 ``reduceByKey`` 方法可以返回一个分布式的数据集)。
+
+ ``transformations`` 操作都是懒加载的，它们不会立刻进行计算。相反，它们只会记录一个哪些数据集需要执行这个transformation操作(例如，一个文件)。只有当我们执行action操作，必须要给driver返回一个结果的时候，这个transformation操作才会进行计算(因为单纯执行transformation操作没有意义，这个操作不会给driver返回结果，所以，只有调用了action操作才会真正执行transformation操作)。这种设计可以使spark更高效的执行。例如，
+
+默认，当你对一个RDD进行一次action操作的时候，这个RDD都需要重新进行计算。然而，你也可以使用 ``persist`` (或者 ``cache`` )方法把一个RDD持久化到内存中，这样spark将会把这些数据保存到集群中，以便于当你下次查询的时候可以实现更快的访问。在这里也支持把RDD持久化到磁盘中，或者复制到集群的其他节点。
+
+基本操作
+^^^^^^^^^
+
+为了演示RDD的基本操作，考虑使用下面的简单例子
+
+::
+	val lines = sc.textFile("data.txt")
+	val lineLengths = lines.map(s => s.length)
+	val totalLength = lineLengths.reduce((a, b) => a + b)
+
+第一行代码表示读取一个外部文件来获得一个基本的RDD。这个数据没有加载到内存中或者其他地方， ``lines`` 仅仅是一个指向文件的指针。
+第二行代码表示定义了一个 ``lineLengths`` 作为 ``map`` 操作的结果。由于懒加载的原因，``lineLengths`` 不是立即计算的。
+最后，我们执行 ``reduce`` 函数，这个是一个action操作。这个时候，spark把这个计算任务分布到不同的机器上去运行，并且每台机器运行map的一部分和本地的聚合，最终把结果返回给driver程序。
+
+如果我们以后还要使用 ``lineLengths`` ，我们可以执行下面代码
+
+::
+	lineLengths.persist()
+
+在执行 ``reduce`` 函数之前，这将导致进行第一次计算之后把 ``lineLengths`` 保存到内存中。
+
+函数操作
+^^^^^^^^^
+
+Spark’s API relies heavily on passing functions in the driver program to run on the cluster. There are two recommended ways to do this:
+
+* Anonymous function syntax, which can be used for short pieces of code.
+* Static methods in a global singleton object. For example, you can define object MyFunctions and then pass MyFunctions.func1, as follows:
+
+::
+	
+	object MyFunctions {
+	  def func1(s: String): String = { ... }
+	}
+
+	myRdd.map(MyFunctions.func1)
+
+Note that while it is also possible to pass a reference to a method in a class instance (as opposed to a singleton object), this requires sending the object that contains that class along with the method. For example, consider:
+
+::
+	class MyClass {
+	  def func1(s: String): String = { ... }
+	  def doStuff(rdd: RDD[String]): RDD[String] = { rdd.map(func1) }
+	}
+
+Here, if we create a new MyClass instance and call doStuff on it, the map inside there references the func1 method of that MyClass instance, so the whole object needs to be sent to the cluster. It is similar to writing rdd.map(x => this.func1(x)).
+
+In a similar way, accessing fields of the outer object will reference the whole object:
+
+::
+	class MyClass {
+	  val field = "Hello"
+	  def doStuff(rdd: RDD[String]): RDD[String] = { rdd.map(x => field + x) }
+	}
+
+is equivalent to writing rdd.map(x => this.field + x), which references all of this. To avoid this issue, the simplest way is to copy field into a local variable instead of accessing it externally:
+
+::
+
+	def doStuff(rdd: RDD[String]): RDD[String] = {
+	  val field_ = this.field
+	  rdd.map(x => field_ + x)
+	}
+
+
+
+
+
+
